@@ -1,12 +1,10 @@
 import { View, StyleSheet, Text, Dimensions} from 'react-native';
 import React, {Component, PropTypes} from 'react';
 import {Card, Button} from 'react-native-elements'
-const WINDOW_WIDTH = Dimensions.get('window').width;
 
 const DeliveryCard = ({delivery}: {}) => {
   return (
     <Card
-      containerStyle={{width: WINDOW_WIDTH - 32}}
       title={delivery.customer}
       image={{uri: delivery.image}}>
 
