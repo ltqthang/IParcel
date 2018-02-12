@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, Dimensions} from 'react-native';
 import React, {Component, PropTypes} from 'react';
 import {Card, Button} from 'react-native-elements'
+import { Navigation } from 'react-native-navigation';
 
 const DeliveryCard = ({delivery}: {}) => {
   return (
@@ -22,6 +23,7 @@ const DeliveryCard = ({delivery}: {}) => {
         backgroundColor='#03A9F4'
         fontFamily='Lato'
         buttonStyle={{borderRadius: 2}}
+        onPress={() => Navigation.showModal({screen: 'DeliveryDetails'})}
         text='Pick Up Now'/>
     </Card>
   );
