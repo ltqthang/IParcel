@@ -10,6 +10,8 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
+        for (int i = 0; i< 10; i++) {
+        }
         return "IParcel";
     }
 }

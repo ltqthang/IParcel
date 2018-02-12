@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import mockdata from "./utils/mockdata";
 import DeliveryCard from "./Delivery/Components/DeliveryCard";
-import {Header} from "react-native-elements";
 
 type Props = {};
 
@@ -32,10 +31,6 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Header
-          leftComponent={{ icon: 'menu', color: '#fff' }}
-          centerComponent={{ text: 'IParcel', style: { color: '#fff' } }}
-        />
         <FlatList
           data={deliveries}
           renderItem={this.renderDeliveryCard}
@@ -48,7 +43,6 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'ios' ? 36 : 0,
     backgroundColor: '#F5FCFF',
   },
 });
