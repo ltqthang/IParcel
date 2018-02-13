@@ -12,12 +12,12 @@ import {
   View,
   Platform
 } from 'react-native';
-import mockdata from "./utils/mockdata";
+import generateMockData from "./utils/mockdata";
 import DeliveryCard from "./Delivery/Components/DeliveryCard";
 
 type Props = {};
 
-const deliveries = mockdata;
+const deliveries = generateMockData();
 
 export default class App extends Component<Props> {
   constructor(props) {

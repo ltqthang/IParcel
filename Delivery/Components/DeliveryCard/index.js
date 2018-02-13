@@ -1,12 +1,13 @@
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import React, {Component, PropTypes} from 'react';
 import {Card, Button} from 'react-native-elements'
+import getMapPreviewUrl from "./../../../utils/getMapPreviewUrl";
 
 const DeliveryCard = ({delivery, navigator}: {}) => {
   return (
     <Card
       title={delivery.customer}
-      image={{uri: delivery.image}}>
+      image={{uri: getMapPreviewUrl(delivery.from, delivery.to)}}>
 
       <Text>
         <Text h4 style={{fontWeight: 'bold'}}>{'From: '}</Text>
