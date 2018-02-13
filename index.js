@@ -1,4 +1,15 @@
-import { AppRegistry } from 'react-native';
 import App from './App';
+import DeliveryDetails from './Delivery/DeliveryDetails';
+import { Navigation } from 'react-native-navigation';
 
-AppRegistry.registerComponent('IParcel', () => App);
+Navigation.registerComponent('App', () => App);
+Navigation.registerComponent('DeliveryDetails', () => DeliveryDetails);
+
+Navigation.startSingleScreenApp({
+  screen: {
+    screen: 'App',
+    title: 'IParcel',
+    navigatorStyle: {},
+    navigatorButtons: {}
+  },
+});
