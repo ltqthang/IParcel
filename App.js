@@ -17,13 +17,17 @@ import DeliveryCard from "./Delivery/Components/DeliveryCard";
 
 type Props = {};
 
-const deliveries = generateMockData();
 
 export default class App extends Component<Props> {
   constructor(props) {
     super(props);
 
     this.renderDeliveryCard = this.renderDeliveryCard.bind(this);
+    this.refreshMockData = this.refreshMockData.bind(this);
+
+    this.state = {
+      deliveries: generateMockData(),
+    }
   }
 
   renderDeliveryCard({item}) {
@@ -34,12 +38,22 @@ export default class App extends Component<Props> {
     )
   }
 
+  refreshMockData() {
+    this.setState({
+      deliveries: generateMockData(),
+    })
+  }
+
   render() {
+    const {deliveries} = this.state;
+
     return (
       <View style={styles.container}>
         <FlatList
           keyExtractor={item => item.id}
           data={deliveries}
+          onRefresh={this.refreshMockData}
+          refreshing={false}
           renderItem={this.renderDeliveryCard}
         />
       </View>
@@ -50,6 +64,6 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
 });
