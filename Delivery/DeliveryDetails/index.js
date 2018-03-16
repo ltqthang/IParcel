@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
-import {Dimensions, StyleSheet, View, Alert} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import {GOOGLE_MAPS_APIKEY} from "./../../const";
-import {Button} from "react-native-elements";
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -19,7 +18,6 @@ class DeliveryDetails extends Component {
 
   constructor(props) {
     super(props);
-    this.finishDelivery = this.finishDelivery.bind(this);
 
     this.state = {
       // Init with Singapore
@@ -27,18 +25,6 @@ class DeliveryDetails extends Component {
     };
 
     this.mapView = null;
-  }
-
-  finishDelivery() {
-    Alert.alert(
-      'Confirm',
-      'Confirm finish deliver this parcel?',
-      [
-        {text: 'Yes', onPress: () => this.props.navigator.pop()},
-        {text: 'No', style: 'cancel'},
-      ],
-      {cancelable: false}
-    )
   }
 
   componentDidMount() {
@@ -51,7 +37,7 @@ class DeliveryDetails extends Component {
         }
       })
     }, error => {
-      alert('Cannot get current location!');
+      // TODO: Show eror to user
       console.log('error', error)
     })
   }
@@ -62,61 +48,52 @@ class DeliveryDetails extends Component {
     const {from, to} = delivery;
 
     return (
-      <View style={{flex: 1, justifyContent: 'flex-end'}}>
-        <MapView
-          initialRegion={{
-            ...SINGAPORE_COORDINATE,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
+      <MapView
+        initialRegion={{
+          ...SINGAPORE_COORDINATE,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA
+        }}
+        style={StyleSheet.absoluteFill}
+        ref={c => this.mapView = c}
+      >
+
+        <MapView.Marker
+          title={'Pick up: ' + from.name}
+          pinColor={'red'}
+          key={`coordinate_${from.latitude + from.longitude}`}
+          coordinate={from}/>
+
+        <MapView.Marker
+          title={'Drop off: ' + to.name}
+          pinColor={'green'}
+          key={`coordinate_${to.latitude + to.longitude}`}
+          coordinate={to}/>
+
+        <MapViewDirections
+          origin={currentCoordinate}
+          waypoints={[from]}
+          destination={to}
+          apikey={GOOGLE_MAPS_APIKEY}
+          strokeWidth={3}
+          strokeColor="hotpink"
+          onReady={(result) => {
+            this.mapView.fitToCoordinates(result.coordinates, {
+              edgePadding: {
+                right: (width / 20),
+                bottom: (height / 20),
+                left: (width / 20),
+                top: (height / 20),
+              }
+            });
           }}
-          style={StyleSheet.absoluteFill}
-          ref={c => this.mapView = c}
-        >
+          onError={(errorMessage) => {
+            // TODO: Show eror to user
+            console.log('errorMessage', errorMessage);
+          }}
+        />
 
-          <MapView.Marker
-            title={'Pick up: ' + from.name}
-            pinColor={'red'}
-            key={`coordinate_${from.latitude + from.longitude}`}
-            coordinate={from}/>
-
-          <MapView.Marker
-            title={'Drop off: ' + to.name}
-            pinColor={'green'}
-            key={`coordinate_${to.latitude + to.longitude}`}
-            coordinate={to}/>
-
-          <MapViewDirections
-            origin={currentCoordinate}
-            waypoints={[from]}
-            destination={to}
-            apikey={GOOGLE_MAPS_APIKEY}
-            strokeWidth={3}
-            strokeColor="hotpink"
-            onReady={(result) => {
-              this.mapView.fitToCoordinates(result.coordinates, {
-                edgePadding: {
-                  right: (width / 20),
-                  bottom: (height / 20),
-                  left: (width / 20),
-                  top: (height / 20),
-                }
-              });
-            }}
-            onError={(errorMessage) => {
-              alert('Cannot get direction!');
-              console.log('errorMessage', errorMessage);
-            }}
-          />
-
-        </MapView>
-
-        <Button
-          backgroundColor='#03A9F4'
-          fontFamily='Lato'
-          buttonStyle={{width: width - 16, margin: 8}}
-          onPress={this.finishDelivery}
-          text='Done'/>
-      </View>
+      </MapView>
     );
   }
 }
